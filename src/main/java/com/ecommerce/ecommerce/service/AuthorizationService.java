@@ -10,7 +10,7 @@ import com.ecommerce.ecommerce.repository.UsuarioRepository;
 
 
 @Service
-public class AuthorizationService {
+public class AuthorizationService implements UserDetailsService {
     
     @Autowired
     UsuarioRepository usuario_repositorio;
