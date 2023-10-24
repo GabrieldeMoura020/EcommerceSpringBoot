@@ -5,14 +5,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.ecommerce.model.AuthenticationDTO;
 import com.ecommerce.ecommerce.model.LoginResponseDTO;
 import com.ecommerce.ecommerce.model.UsuarioEntity;
-import com.ecommerce.ecommerce.repository.UsuarioRepository;
 import com.ecommerce.ecommerce.service.TokenService;
 import jakarta.validation.Valid;
 
@@ -21,9 +22,6 @@ import jakarta.validation.Valid;
 public class AuthController {
     
     @Autowired
-    public UsuarioRepository repositorio;
-
-    @Autowired
     public AuthenticationManager auth_manager;
 
     @Autowired
@@ -31,12 +29,17 @@ public class AuthController {
 
     @PostMapping(value="/auth")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data){
-        
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.senha());
-        var auth = this.auth_manager.authenticate(usernamePassword);
-        var token = token_service.generateToken((UsuarioEntity) auth.getPrincipal());
 
+        var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.senha());
+        var auth    = this.auth_manager.authenticate(usernamePassword);
+        var token   = token_service.generateToken((UsuarioEntity) auth.getPrincipal());
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
-
+    
+    @GetMapping(value="/auth/verifytoken")
+    public boolean verifyToken(@RequestParam String token){
+        String _token = token_service.validateToken(token);
+        return _token == "" ? false : true;
+    }
+    
 }
