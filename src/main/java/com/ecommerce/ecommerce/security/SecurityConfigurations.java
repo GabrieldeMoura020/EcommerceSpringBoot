@@ -33,7 +33,10 @@ public class SecurityConfigurations implements WebMvcConfigurer {
                 .authorizeHttpRequests(authorize -> authorize
                     .requestMatchers(HttpMethod.POST, "/auth").permitAll()
                     .requestMatchers(HttpMethod.GET, "/").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/").permitAll()
+                    
                     .requestMatchers(HttpMethod.POST, "/usuario/salvar").permitAll()
+                    .requestMatchers(HttpMethod.GET,"/usuario/pesquisar/{termo}").permitAll()
                     .anyRequest().authenticated()
                     
                 )                                

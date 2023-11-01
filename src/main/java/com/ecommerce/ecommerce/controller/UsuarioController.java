@@ -63,8 +63,16 @@ public class UsuarioController {
         _user = usuario;
         usuarioRepositorio.save(_user);
         return ResponseEntity.ok().build();
-}
+    }
 
+    @GetMapping(value = "/usuario/pesquisar/{termo}")
+    public ResponseEntity pesquisar(
+        @PathVariable String termo
+    ){
+        List<UsuarioEntity> list = this.usuarioRepositorio.findByNomeContaining(termo);
+
+        return ResponseEntity.ok(list);
+    }
 }
    
 
